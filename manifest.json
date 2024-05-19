@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3, 
+  "name": "Display on Top",
+  "version": "1.0",
+  "description": "Description of your extension",
+   "content_scripts":[{
+    "matches":["https://chatgpt.com/*"],
+    "js":["content_script.js"]
+  }],
+  "host_permissions":["<all_urls>"]
+ }
