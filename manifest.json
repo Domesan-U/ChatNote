@@ -1,11 +1,29 @@
 {
   "manifest_version": 3, 
-  "name": "Display on Top",
+  "name": "ChatNote",
   "version": "1.0",
-  "description": "Description of your extension",
+  
+  "description": "Facilitates Easy Copy Responses and Converts Responses into Notes for references",
+  "action":{
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "chatgpt-icon.png",
+      "48": "chatgpt-icon.png",
+      "128": "chatgpt-icon.png"
+    }
+  },
    "content_scripts":[{
     "matches":["https://chatgpt.com/*"],
     "js":["content_script.js"]
   }],
-  "host_permissions":["<all_urls>"]
+  "host_permissions":["<all_urls>"],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "./font-awesome.min"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
+  
  }

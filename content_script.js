@@ -1,16 +1,18 @@
 let counter=1;
+let clickedTexts=[];
 let allCont="";
 const button = document.createElement('button');
-button.textContent = 'Save';
-// Apply styles to the button
+button.textContent = 'Save as file';
+//Apply styles to the button
 button.style.position = 'fixed';
 button.style.bottom = '100px';
 button.style.right = '20px';
 button.style.padding = '10px 20px';
-button.style.border = '2px solid white'; /* Button border */
-button.style.backgroundColor = 'transparent'; /* Transparent background */
+button.style.border = '2px solid white'; 
+button.style.borderRadius='20px';/* Button border */
+button.style.backgroundColor = 'tranparent'; /* Transparent background */
 button.style.color = '#fff'; /* White text color */
-button.style.fontSize = '16px';
+button.style.fontSize = '12px';
 button.style.cursor = 'pointer';
 button.onclick=generatePDF
 
@@ -18,6 +20,13 @@ button.onclick=generatePDF
 document.body.appendChild(button);
 
 function generatePDF() {
+  if(clickedTexts.length==0){
+    alert("PLEASE SELECT ATLEAST ONE RESPONSE");
+    return;
+  }
+  else{
+    alert("Your request has been downloaded successfully");
+  }
   const now = new Date();
 
 // Get the current date components
@@ -64,82 +73,68 @@ const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds
   document.body.removeChild(a);console.log("Hope so called him")
  }   
 let elements
-let clickedTexts=[]
-function checkElementAndAppendButton() {
-  // Find all elements with the specified class name
-  elements = document.getElementsByClassName('markdown prose w-full break-words dark:prose-invert dark');
-  // if(elements==null){
-  //   elements=document.getElementsByClassName('markdown prose w-full break-words dark:prose-invert dark')
-  // }
 
-  // Check if any matching element is found
+function checkElementAndAppendButton() {
+  elements = document.getElementsByClassName('markdown prose w-full break-words dark:prose-invert dark');
   if(elements.length>0)
   for(let i=0; i<elements.length; i++) {
-    // Select the first matching element
-    const element = elements[i];
-
+  const element = elements[i];
     // Create a new button element
-    const div = document.createElement('div');
+const mainDiv = document.createElement('div');
 
-div.style.padding = '5px';
+const div = document.createElement('div');
 const button = document.createElement('button')
-button.textContent = ' Copy Response ';
-button.textContent.padding='10px'
-button.style.margin='10px'
-button.style.color = '#fff'
+button.textContent = ' Select ';
+// button.textContent.padding='10px'
+// button.style.margin='10px'
+// button.style.color = '#fff'
 button.id=i;
-button.style.backgroundColor = 'black'
-button.style.border = '2px solid blue'
+// button.style.backgroundColor = 'black'
+button.style.border = '2px solid'
 button.style.borderRadius='10px'
 button.style.borderColor='white'
-button.style.cursor = 'pointer'
+// button.style.cursor = 'pointer'
+
 button.addEventListener('click', clickedELement);
+///
 // Append the button to the div
 div.appendChild(button);
 const button2 = document.createElement('button')
-button2.textContent = 'Copy to Clipboard';
-button2.textContent.padding='10px'
-button2.style.margin='10px'
-button2.style.color = '#fff'
-button2.id=i;
-button2.style.backgroundColor = 'black'
-button2.style.border = '2px solid blue'
+button2.textContent = ' Copy ';
+// button2.textContent.padding='10px'
+// button2.style.margin='10px'
+// button2.style.color = '#fff'
+ button2.id=i;
+button2.style.border = '2px solid'
 button2.style.borderRadius='10px'
 button2.style.borderColor='white'
-button2.style.cursor = 'pointer'
 button2.addEventListener('click', copyText);
 // Append the button to the div
-const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-    svg.setAttribute('class', 'icon');
-    svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
-    svg.setAttribute('viewBox', '0 0 24 24');
-    svg.setAttribute('width', '24');
-    svg.setAttribute('height', '24');
-    svg.innerHTML = `
-      <path fill="none" d="M0 0h24v24H0V0z"/>
-      <path d="M17 1H7c-1.1 0-1.99.9-1.99 2L5 21c0 1.1.89 2 1.99 2H17c1.1 0 2-.9 2-2V3c0-1.1-.9-2-2-2zm0 18H7V4h10v15z"/>
-    `;
+const div2 = document.createElement('div');
 
-    // Append the icon to the desired location
-    // Add click event listener to the icon
-    svg.addEventListener('click', copyText);
+div2.style.margin='10px';
+div2.style.float="right";
+div2.appendChild(button2);
+mainDiv.appendChild(div);
+mainDiv.appendChild(div2);
+
+div.style.float="right";
+div.style.margin='10px';
 
 
-div.appendChild(svg);
-
-    
     // Append the button as a child of the found element
-    element.parentNode.insertBefore(div, element);
+    element.parentNode.insertBefore(mainDiv, element);
+    
     //element.appendChild(div);
     //console.log(element.textContent+" : ")
   } else {
     console.log("No matching element found");
   }
 }
-const link = document.createElement('link');
-link.rel = 'stylesheet';
-link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';
-document.head.appendChild(link);
+// const link = document.createElement('link');
+// link.rel = 'stylesheet';
+// link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css';
+// document.head.appendChild(link);
 function copyText(event){
   let id = event.target.id;
   console.log(event.target.id+" clicked");
@@ -155,7 +150,6 @@ function copyText(event){
 // Call the function after a delay of 10 seconds
 //while(document.getElementsByClassName('markdown prose w-full break-words dark:prose-invert dark')!=null){
 setTimeout(checkElementAndAppendButton, 5000);
-
 function clickedELement(event){
 
   let id = event.target.id;
@@ -165,14 +159,14 @@ function clickedELement(event){
 }).catch(function(err) {
     console.error('Could not copy text: ', err);
 });
-  if(event.target.textContent===' Copy Response '){
+  if(event.target.textContent===' Select '){
     allCont+=event.target
     clickedTexts.push(event.target)
     event.target.textContent=" "+(clickedTexts.indexOf(event.target)+1)+" ";
     counter++;
   }
   else{
-    event.target.textContent=' Copy Response ';
+    event.target.textContent=' Select ';
     clickedTexts.splice(clickedTexts.indexOf(event.target),1);
     toChangeNumber();
     counter--;
