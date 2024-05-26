@@ -87,3 +87,7 @@ footer {
     font-size: 0.9em;
     color: #777;
 }
+
+#image {
+    transition: transform 0.5s ease;
+}

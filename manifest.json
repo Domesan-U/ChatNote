@@ -14,16 +14,23 @@
   },
    "content_scripts":[{
     "matches":["https://chatgpt.com/*"],
-    "js":["content_script.js"]
+    "js":["jspdf.min.js",
+    "buttons.js",
+    "html2canvas.min.js",
+      "content_script.js"]
   }],
   "host_permissions":["<all_urls>"],
   "web_accessible_resources": [
     {
       "resources": [
-        "./font-awesome.min"
+        "chatgpt-icon.png",
+        "font-awesome.min",
+        "styles.css"
       ],
       "matches": ["<all_urls>"]
     }
   ]
   
  }
+
+
