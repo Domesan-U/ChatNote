@@ -11,6 +11,7 @@ button.style.backgroundColor = 'tranparent';
 button.style.color = '#fff';
 button.id=id;
 button.style.fontSize = '12px';
+button.style.height="95%";
 button.style.cursor = 'pointer';
 button.onclick = func;
 return button;
