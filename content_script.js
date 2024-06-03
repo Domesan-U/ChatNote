@@ -1,6 +1,12 @@
 let clickedTexts = [];
 let allCont = "";
 let isImageOn=1;
+let isDarkTheme=1;
+if(window.getComputedStyle(document.body).backgroundColor.includes('255')){
+    isDarkTheme=0;
+}
+
+checkingSimult();
 
 const button=createButton("Save as file",generatePDF,'save');
 const selectAll=createButton("Select All",selectAllFunc,'select');
@@ -23,9 +29,50 @@ img.id='image';
 img.onclick=function(){
     openButtons(isImageOn);
 };
-document.body.appendChild(img);
-const link = document.createElement('link');
+// Function to handle mouse movement while dragging
+function onMouseDrag(event) {
+    const { movementX, movementY } = event;
+   
+    // Get the current computed style of the container
+    let getContainerStyle = window.getComputedStyle(iconsBack);
 
+    // Parse the left and top values from the container's style
+    let bottomValue = parseInt(getContainerStyle.bottom);
+    let topValue = parseInt(getContainerStyle.top);
+    img.style.top = `${topValue + movementY}px`;
+    img.style.bottom = `${bottomValue - movementY}px`;
+    // Update the container's position based on mouse movement
+    iconsBack.style.top = `${topValue + movementY}px`;
+    iconsBack.style.bottom = `${bottomValue - movementY}px`;
+}
+
+// Function to handle mouse down event
+iconsBack.addEventListener("mousedown", () => {
+   
+    // Add event listeners for mousemove and mouseup events to the document
+    document.addEventListener("mousemove", onMouseDrag);
+    document.addEventListener("mouseup", onMouseUp);
+});
+img.addEventListener("mousedown", () => {
+    
+    // Add event listeners for mousemove and mouseup events to the document
+    document.addEventListener("mousemove", onMouseDrag);
+    document.addEventListener("mouseup", onMouseUp);
+});
+
+
+// Function to handle mouse release
+function onMouseUp() {
+   
+    // Remove event listeners for mousemove and mouseup events from the document
+    document.removeEventListener("mousemove", onMouseDrag);
+    document.removeEventListener("mouseup", onMouseUp);
+}
+document.body.appendChild(img);
+
+
+
+const link = document.createElement('link');
 function generatePDF() {
     if (clickedTexts.length == 0) {
         alert("Please select atleast one response");
@@ -54,41 +101,86 @@ function generatePDF() {
     document.body.removeChild(a);
 }
 let elements;
-checkingSimult();
+
 function checkingSimult(){
-let targetNode = document.getElementsByClassName('markdown prose w-full break-words dark:prose-invert dark');
-if(targetNode.length<=0){
+    let targetNode = document.getElementsByClassName('markdown prose w-full break-words dark:prose-invert');
+
+    if(window.getComputedStyle(document.body).backgroundColor.includes('255')){
+        targetNode = document.getElementsByClassName('markdown prose w-full break-words dark:prose-invert');
+
+    }
+    
+        
+//if(targetNode.length<=0){
     const intervalId=setInterval(()=>{
+       // console.log("trapped inside "+ targetNode.length);
     if(targetNode.length>0){
         clearInterval(intervalId);
+        //console.log("cleared interveal and calling checkELement at 106");
         checkElementAndAppendButton();
         const config = { attributes: true, childList: true, subtree: true };
-const callback =  (mutationList, observer) => {
+const callback =  (mutationList) => {
   for (const mutation of mutationList) {
+    //console.log("outerMain: "+mutation);
     if (mutation.type === "childList") {
             mutation.addedNodes.forEach(addedNode => {
-                if (addedNode.className==='result-streaming markdown prose w-full break-words dark:prose-invert dark' || addedNode.className.includes("markdown prose w-full break-words dark:prose-invert dark") ) {
+                try{
+                //    console.log("Main: "+addedNode.className+" :  "+addedNode);
+                if (addedNode && addedNode.className.includes('result-streaming markdown prose w-full break-words dark:prose-invert')  ) {
                     checkElementAndAppendButton();
                 }
+                else if( addedNode.className.includes('group fixed bottom-3 end-3')  || addedNode.className.includes('react-scroll-to-bottom--css')){
+                    if(document.getElementById(0)==null){
+                    resetAll();
+                    checkElementAndAppendButton();
+                    }
+                }
+            }
+            catch(err){
+                //console.error(err);
+            }
             });
      } 
+     else if(mutation.type==='attributes' && mutation.attributeName === 'style') {
+        let newColor = window.getComputedStyle(document.body).backgroundColor;
+        if(window.getComputedStyle(document.body).backgroundColor.includes('255')){
+            isDarkTheme=0;
+            changeTheme(0);
+        }
+        else{
+            isDarkTheme=1;
+            changeTheme(1);
+        }
+    }
      }
 };
+
+
 const observer = new MutationObserver(callback);
 let content=document.getElementsByClassName("flex flex-col text-sm");
 if(content[0]){
-observer.observe(content[0], config);
+observer.observe(document.body, config);
 }
     }
 },100);
+//}
 }
+
+function resetAll(){
+    theLastButton=0;
+    elements=[];
+    clickedTexts=[];
+
 }
 let theLastButton=0;
 async function checkElementAndAppendButton() {
-    elements = document.getElementsByClassName('markdown prose w-full break-words dark:prose-invert dark');
+    elements = document.getElementsByClassName('markdown prose w-full break-words dark:prose-invert');
+    if(window.getComputedStyle(document.body).backgroundColor.includes('255')){
+        elements = document.getElementsByClassName('markdown prose w-full break-words dark:prose-invert');
+    }
  if (elements.length > 0){
         for (let i = theLastButton; i < elements.length; i++) {
-            
+      
             const element = elements[i];
             const mainDiv = document.createElement('div');
             const div = document.createElement('div');
@@ -98,13 +190,21 @@ async function checkElementAndAppendButton() {
             checkbox.addEventListener('click', clickedELement);
             const label = document.createElement('label')
             label.htmlFor=i;
+            label.id="selectLabel";
             label.textContent="Select  ";
             div.appendChild(label);
             div.appendChild(checkbox);
-          mainDiv.appendChild(div);
+            mainDiv.appendChild(div);
             div.style.float = "right";
             div.style.margin = '10px';
+            if(window.getComputedStyle(document.body).backgroundColor.includes('255')){
+                changeTheme(0);
+            }
+            else{
+                changeTheme(1);
+            }
             element.parentNode.insertBefore(mainDiv, element);
+           
         } theLastButton=elements.length; 
     }
     
@@ -115,7 +215,7 @@ function clickedELement(event) {
     let id = event.target.id;
     navigator.clipboard.writeText(elements[id].textContent).then(function() {
     }).catch(function(err) {
-        console.error('Could not copy text: ', err);
+   //     console.error('Could not copy text: ', err);
     });
     if (event.target.checked) {
         allCont += event.target
@@ -228,6 +328,9 @@ function convertHtmlTableToAscii(htmlTable) {
     
 function selectAllFunc(){
     clickedTexts=[];
+    if(elements.length==0){
+        alert("Oops there are no responses");
+    }
     for(let i=0; i<elements.length; i++){
         document.getElementById(i).checked=true;
         clickedTexts.push(document.getElementById(i));
@@ -235,6 +338,10 @@ function selectAllFunc(){
 }
 function clear(){
     clickedTexts=[];
+    if(elements.length==0){
+        alert("Oops there are no responses");
+    }
+    
     for(let i=0; i<elements.length; i++){
         document.getElementById(i).checked=false;
     }
@@ -259,4 +366,41 @@ function openButtons(){
         document.getElementById('clear').hidden=false; 
         isImageOn=1;
     }
+}
+
+function changeTheme(theme){
+    if(theme==0){
+        //console.log("called cahngetheme white");
+        //white background
+    document.getElementById('save').style.color="black";
+    if(document.getElementById('selectLabel')!=null)
+    document.getElementById('selectLabel').style.color="black";
+    document.getElementById('select').style.color="black";
+    document.getElementById('clear').style.color="black";
+    document.getElementById('save').style.fontWeight="bold";
+    document.getElementById('select').style.fontWeight="bold";
+    document.getElementById('clear').style.fontWeight="bold";
+    document.getElementById('clear').style.borderColor="black";
+    document.getElementById('save').style.borderColor="black";
+    document.getElementById('select').style.borderColor="black";
+    
+}
+else{
+   // console.log("called cahngetheme black");
+    
+    //black background
+    document.getElementById('save').style.color="white";
+    if(document.getElementById('selectLabel')!=null)
+    document.getElementById('selectLabel').style.color="white";
+    document.getElementById('select').style.color="white";
+    document.getElementById('clear').style.color="white";
+    document.getElementById('save').style.fontWeight="bold";
+    document.getElementById('select').style.fontWeight="bold";
+    if(document.getElementById('selectLabel')!=null)
+    document.getElementById('selectLabel').style.fontWeight="bold";
+    document.getElementById('clear').style.fontWeight="bold";
+    document.getElementById('clear').style.borderColor="white";
+    document.getElementById('save').style.borderColor="white";
+    document.getElementById('select').style.borderColor="white";
+}
 }
