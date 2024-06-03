@@ -16,6 +16,38 @@
         .note-text {
             margin-top: 50px; /* Adjust the margin to add spacing */
         }
+
+        /* CSS for the icons and steps */
+        .steps-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+        .step {
+            text-align: center;
+            margin: 0 10px; /* Adjust spacing between icons */
+        }
+        .step img {
+            width: 276px; /* Increase width by 38% */
+            height: 200px; /* Keep height the same */
+            cursor: pointer; /* Add cursor pointer for indicating clickability */
+            transition: transform 0.3s ease; /* Add smooth transition effect for image zoom */
+            transform-origin: center; /* Ensure zoom happens from the center */
+            image-rendering: -webkit-optimize-contrast; /* Enhance image rendering */
+            image-rendering: crisp-edges; /* Enhance image rendering */
+        }
+        .step img:hover {
+            transform: scale(3); /* Add scaling effect on hover */
+        }
+
+        /* CSS for the description paragraph */
+        .description p {
+            text-align: justify;
+            margin: 0 auto;
+            width: 80%; /* Adjust the width to horizontally spread the paragraph */
+            font-size: 14px; /* Reduce the font size */
+        }
     </style>
 </head>
 <body>
@@ -29,9 +61,35 @@
     <section class="description">
         <p>ChatNote is a powerful Chrome extension designed to enhance your ChatGPT experience. With ChatNote, you can effortlessly save your ChatGPT responses to the clipboard and download them as text files for future reference. Whether you are using ChatGPT for research, learning, or entertainment, ChatNote ensures that your valuable interactions are always at your fingertips. Experience seamless note-taking and stay organized with ChatNote.</p>
     </section>
+    <section class="steps-container">
+        <div class="step">
+            <img src="icon1.png" alt="Step 1">
+            <p>Step 1</p>
+        </div>
+        <div class="step">
+            <img src="icon2.png" alt="Step 2">
+            <p>Step 2</p>
+        </div>
+        <div class="step">
+            <img src="icon3.png" alt="Step 3">
+            <p>Step 3</p>
+        </div>
+        <div class="step">
+            <img src="icon4.png" alt="Step 4">
+            <p>Step 4</p>
+        </div>
+    </section>
     <section class="add-extension">
+<<<<<<< HEAD
+=======
+        <a href="video1.mp4" target="_blank" class="google-btn">Tutorial</a> <!-- Assuming "video1.mp4" is the name of your local video file -->
+>>>>>>> c6d13ce07844971b6b477e54d21ccf4cbe96d437
         <div class="note-text">
             <p><strong>Note:</strong> If you don't see the copy option, try refreshing the page.</p>
+        </div>
+        <div class="contact-info">
+            <p>For further queries, contact: <a href="mailto:domesandms@gmail.com">domesandms@gmail.com</a></p>
+            <p>To provide feedback and reviews, please fill out our <a href="https://forms.gle/qux8FBNU9kiSm5xi8" target="_blank">feedback form</a>.</p>
         </div>
     </section>
     <footer>
@@ -39,5 +97,6 @@
     </footer>
 </body>
 </html>
+
 
 
