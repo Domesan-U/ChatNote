@@ -17,10 +17,7 @@ iconsBack.appendChild(button);
 iconsBack.appendChild(selectAll);
 iconsBack.appendChild(clearBut);
 iconsBack.style.position="fixed";
-iconsBack.style.border="5px solid #10A37F";
-iconsBack.style.margin="2px";
-iconsBack.style.height="25%";
-iconsBack.style.borderRadius="20px";
+
 iconsBack.style.display="grid";
 iconsBack.style.rowGap="10px";
 resizeElement();
@@ -28,10 +25,12 @@ window.addEventListener("resize",resizeElement);
 function resizeElement(){
     if(window.innerWidth>1000){
         iconsBack.style.width="10%";
+
         }
         else{
         iconsBack.style.width="20%";
         }
+   
         
 }
 iconsBack.style.bottom="165px";
